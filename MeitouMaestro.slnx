@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="Core/Maestro.Core.csproj" />
+  <Project Path="App/Maestro.csproj" />
+  <Project Path="Avalonia/Maestro.Avalonia.csproj" />
+  <Folder Name="/Providers/"><Project Path="Providers/Gate/Maestro.Gate.csproj" /></Folder>
+  <Folder Name="/Examples/"><Project Path="Examples/Gatekeeper/Gatekeeper.csproj" /></Folder>
+  <Folder Name="/Tools/">
+    <Project Path="Tools/Checks/Checks.csproj" />
+    <Project Path="Tools/Seed/Seed.csproj" />
+  </Folder>
+</Solution>

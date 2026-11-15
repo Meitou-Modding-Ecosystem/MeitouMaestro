@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <AppHostDotNetSearch>AppRelative;EnvironmentVariable;Global</AppHostDotNetSearch>
+    <AppHostRelativeDotNet>runtime</AppHostRelativeDotNet>
+    <StartupObject>Maestro.Desktop.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Core/Maestro.Core.csproj" /></ItemGroup>
+</Project>

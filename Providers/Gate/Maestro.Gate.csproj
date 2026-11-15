@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Reference Include="MeitouClient;Meitou.Simulation">
+      <HintPath>$(MeitouDir)/%(Identity).dll</HintPath><Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

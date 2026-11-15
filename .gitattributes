@@ -1,0 +1,9 @@
+* text=auto
+*.cs text eol=lf
+*.sh text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.mod binary
+*.mesh binary
+*.dds binary
+*.png binary

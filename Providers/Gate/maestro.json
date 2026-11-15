@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "provider": "maestro.gear-conditions",
+  "name": "Gear Conditions",
+  "actions": [{
+    "id": "worn-goggles", "label": "Recognize worn goggles", "recordType": "DialogueLine",
+    "inputs": [{"key":"wearing","label":"Target wears Square Goggles","kind":"boolean","default":true}],
+    "edits": [
+      {"op":"dependency","file":"Gear Conditions.mod"},
+      {"op":"reference","list":"conditions","target":"1-Gear Conditions.mod","value":"wearing"}
+    ]
+  }]
+}

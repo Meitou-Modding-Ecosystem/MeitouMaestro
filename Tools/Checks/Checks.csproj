@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../Core/Maestro.Core.csproj"/><Reference Update="Meitou.Data;Meitou.Core" Private="true"/></ItemGroup>
+</Project>
