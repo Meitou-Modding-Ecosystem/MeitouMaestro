@@ -5,7 +5,7 @@ param(
 )
 $ErrorActionPreference='Stop'
 $env:MEITOU_DIR=(Resolve-Path -LiteralPath $Meitou).Path
-$dest=[IO.Path]::GetFullPath($Output)
+$dest=$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Output)
 $repo=Split-Path $PSScriptRoot
 foreach ($rid in 'linux-x64','win-x64') {
     $target=Join-Path $dest $rid
