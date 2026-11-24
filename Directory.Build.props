@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Version>0.1.0-playtest.1</Version>
+    <Version>0.1.0-playtest.2</Version>
     <MeitouDir Condition="'$(MeitouDir)' == ''">$(MEITOU_DIR)</MeitouDir>
     <PathMap>$(MSBuildThisFileDirectory)=/_/</PathMap>
     <EnableSourceLink>false</EnableSourceLink>
@@ -18,6 +18,6 @@
     </Reference>
   </ItemGroup>
   <Target Name="CheckClient" BeforeTargets="ResolveAssemblyReferences">
-    <Error Condition="!Exists('$(MeitouDir)/Meitou.Data.dll')" Text="Set MEITOU_DIR to the extracted v0.20.1 game directory." />
+    <Error Condition="!Exists('$(MeitouDir)/Meitou.Data.dll')" Text="Set MEITOU_DIR to the extracted v0.22.1 game directory." />
   </Target>
 </Project>

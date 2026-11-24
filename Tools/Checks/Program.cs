@@ -4,6 +4,30 @@ using System.Text.Json.Nodes;
 using Maestro.Core;
 using Meitou.Data.Fcs;
 
+if (args is ["--reader-proof", var currentReaders, var oldReaders, var readerScratch])
+{
+    void Reject(string folder, string message)
+    {
+        try { EngineReaders.Select(folder); throw new Exception("Accepted incompatible readers: " + folder); }
+        catch (Exception ex) when (ex is InvalidDataException or FileNotFoundException or InvalidOperationException)
+        {
+            Test(ex.Message.Contains(message, StringComparison.Ordinal), "reader diagnostic: " + message);
+        }
+    }
+    Reject(oldReaders, "Expected v0.22.1");
+    string scratch = Directory.CreateDirectory(Path.Combine(readerScratch, Guid.NewGuid().ToString("N"))).FullName;
+    File.Copy(Path.Combine(currentReaders, "Meitou.Core.dll"), Path.Combine(scratch, "Meitou.Core.dll"));
+    Reject(scratch, "Meitou.Data.dll");
+    File.Copy(Path.Combine(oldReaders, "Meitou.Data.dll"), Path.Combine(scratch, "Meitou.Data.dll"));
+    Reject(scratch, "Expected v0.22.1 of Meitou.Data");
+    File.Copy(Path.Combine(currentReaders, "Meitou.Data.dll"), Path.Combine(scratch, "Meitou.Data.dll"), true);
+    EngineReaders.Select(currentReaders);
+    EngineReaders.Select(currentReaders);
+    Test(true, "v0.22.1 readers accepted repeatedly after rejected selections");
+    Reject(scratch, "Restart Maestro");
+    return;
+}
+
 if (args is ["--compare-saddle", var outputFit, var referenceFit])
 {
     var fit = FcsReader.ReadFile(outputFit);

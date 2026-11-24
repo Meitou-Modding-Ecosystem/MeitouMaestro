@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AssemblyName>MeitouMaestro</AssemblyName>
-    <Version>0.1.0-playtest.1</Version>
+    <Version>0.1.0-playtest.2</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>

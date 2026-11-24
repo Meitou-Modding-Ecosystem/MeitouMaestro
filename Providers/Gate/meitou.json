@@ -1,4 +1,4 @@
 {
-  "id":"maestro.gear-conditions","version":"0.1.0","apiVersion":2,"gameVersion":"=0.20.1",
+  "id":"maestro.gear-conditions","version":"0.1.0","apiVersion":2,"gameVersion":"=0.22.1",
   "assemblies":["Maestro.Gate.dll"],"entry":"Maestro.Gate.GearConditions"
 }
