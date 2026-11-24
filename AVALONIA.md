@@ -5,7 +5,7 @@ Maestro playtest.1 targets **MeitouClient v0.20.1** and **Meitou Transport playt
 ## Open the editor
 
 1. Extract the editor for your system. On Windows, open **MeitouMaestro.exe**. On Linux, extract the `.tar.gz` with `tar -xzf` and run **./MeitouMaestro** from the extracted folder in your desktop session. Use a desktop with OpenGL. On minimal Ubuntu 24.04, install the X11, Mesa GL, fontconfig, ICU and GTK 3 desktop libraries. The tested Linux environment is Ubuntu 24.04 x64 under WSLg.
-2. Extract the [Transport framework ZIP](https://github.com/mattresspad/MeitouTransport/releases/tag/v0.3.0-playtest.5) into Kenshi’s `mods` folder. The framework includes the `maestro.json` that supplies **Add riding fit**. Enable the framework in your authoring profile. To fit a custom animal from a separate mod, enable that mod too.
+2. Extract the [Transport framework ZIP](https://github.com/Meitou-Modding-Ecosystem/MeitouTransport/releases/tag/v0.3.0-playtest.5) into Kenshi’s `mods` folder. The framework includes the `maestro.json` that supplies **Add riding fit**. Enable the framework in your authoring profile. To fit a custom animal from a separate mod, enable that mod too.
 3. Choose your Kenshi installation, the extracted **game** directory containing the v0.20.1 `Meitou.Core.dll` and `Meitou.Data.dll`, and an empty writable project folder named **Garru Saddle**. You can paste paths into all three fields. [Meitou v0.20.1 game packages](https://github.com/VlcekM/MeitouClient/releases/tag/v0.20.1)
 
 Extract the Garru Saddle example ZIP from the same Transport release into a reference folder. Its meshes and textures can be freely reused.
