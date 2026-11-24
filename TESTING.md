@@ -1,5 +1,11 @@
 # Build and replay the prototype
 
+## Automated CI
+
+Pull requests and pushes to `beta`, `main` and `release` run Windows and Linux builds plus the asset-free reader-selection and fit/export proofs. Windows builds the full solution including WPF; Linux builds every non-WPF project. `Release readiness` requires both platform jobs to succeed. The workflow downloads official v0.22.1 and v0.20.1 reader fixtures and verifies their pinned ZIP SHA-256 hashes; it requires no Kenshi assets or secrets. Run the same checks locally with `pwsh Tools/CI.ps1 -CurrentReaders <v0.22.1-folder> -OldReaders <v0.20.1-folder> -Scratch <scratch-folder>`.
+
+CI does not exercise rendered UI, authoring with original game assets, or in-game rides/dialogue. Those checks remain the manual procedures below.
+
 Current candidate results: [v0.22.1 readers and cross-platform authoring](docs/readers-0221.md). The WPF and dialogue game scripts below are retained reproduction tools; the current pass exercised Avalonia and the ride verifier, with the goggles provider checked in the editor only.
 
 ## Avalonia on Linux and Windows

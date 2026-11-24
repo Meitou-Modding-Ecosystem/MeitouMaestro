@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [beta, main, release]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Build and regression checks (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 11.0.x
+      - name: Download and verify official reader fixtures
+        shell: pwsh
+        run: ./Tools/GetCIReaders.ps1 -Output (Join-Path $env:RUNNER_TEMP 'maestro-readers')
+      - name: Build and run asset-free regressions
+        shell: pwsh
+        run: ./Tools/CI.ps1 -CurrentReaders $env:MEITOU_DIR -OldReaders $env:MAESTRO_OLD_READERS -Scratch (Join-Path $env:RUNNER_TEMP 'maestro-checks')
+
+  release-readiness:
+    name: Release readiness
+    if: always()
+    needs: [validate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require both platform jobs
+        env:
+          RESULTS: ${{ join(needs.*.result, ',') }}
+        run: |
+          python - <<'PY'
+          import os
+          results = os.environ['RESULTS'].split(',')
+          if not results or any(result != 'success' for result in results):
+              raise SystemExit('A required platform check failed, was cancelled, or was skipped')
+          PY
