@@ -2,8 +2,8 @@ name: CI
 
 on:
   pull_request:
+  # Also validate source branches, including this first CI addition from a fork.
   push:
-    branches: [beta, main, release]
   workflow_dispatch:
 
 permissions:

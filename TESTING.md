@@ -2,7 +2,7 @@
 
 ## Automated CI
 
-Pull requests and pushes to `beta`, `main` and `release` run Windows and Linux builds plus the asset-free reader-selection and fit/export proofs. Windows builds the full solution including WPF; Linux builds every non-WPF project. `Release readiness` requires both platform jobs to succeed. The workflow downloads official v0.22.1 and v0.20.1 reader fixtures and verifies their pinned ZIP SHA-256 hashes; it requires no Kenshi assets or secrets. Run the same checks locally with `pwsh Tools/CI.ps1 -CurrentReaders <v0.22.1-folder> -OldReaders <v0.20.1-folder> -Scratch <scratch-folder>`.
+Pull requests and branch pushes run Windows and Linux builds plus the asset-free reader-selection and fit/export proofs. Source-branch pushes also cover the initial workflow addition from a fork. Windows builds the full solution including WPF; Linux builds every non-WPF project. `Release readiness` requires both platform jobs to succeed. The workflow downloads official v0.22.1 and v0.20.1 reader fixtures and verifies their pinned ZIP SHA-256 hashes; it requires no Kenshi assets or secrets. Run the same checks locally with `pwsh Tools/CI.ps1 -CurrentReaders <v0.22.1-folder> -OldReaders <v0.20.1-folder> -Scratch <scratch-folder>`.
 
 CI does not exercise rendered UI, authoring with original game assets, or in-game rides/dialogue. Those checks remain the manual procedures below.
 
