@@ -2,7 +2,7 @@
 
 [Download the Windows x64 or Linux x64 editor](https://github.com/Meitou-Modding-Ecosystem/MeitouMaestro/releases/tag/v0.1.0-playtest.1) (playtest.1, for Meitou v0.20.1)
 
-This branch prepares **Maestro v0.1.0-playtest.2 for MeitouClient v0.22.1**. Build instructions below apply to this candidate; the existing download above remains the previous release.
+This branch prepares **Maestro v0.1.0-playtest.2 for MeitouClient v0.22.1**. Build instructions below apply to this candidate; the existing download above remains the previous release. [Prepared playtest.2 release notes](docs/release-playtest-2.md).
 
 ## Fit my own animal
 

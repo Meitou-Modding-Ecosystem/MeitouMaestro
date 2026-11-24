@@ -4,7 +4,7 @@ Current candidate results: [v0.22.1 readers and cross-platform authoring](docs/r
 
 ## Avalonia on Linux and Windows
 
-Build with the .NET 11 SDK. Run `Tools/PublishAvalonia.ps1 -Meitou <extracted-v0.22.1-game> -Output <publish-directory>` and then `python Tools/package-avalonia.py --publish <publish-directory> --nuget <NuGet-global-packages-directory> --out <handoff>`. Each archive includes its runtime and third-party notices. Build work goes under the chosen publish directory.
+Build with the .NET 11 SDK. Run `Tools/PublishAvalonia.ps1 -Meitou <extracted-v0.22.1-game> -Output <publish-directory>` and then `python Tools/package-avalonia.py --publish <publish-directory> --nuget <NuGet-global-packages-directory> --out <handoff> --source-ref <full-build-commit>`. Use a clean checkout of the supplied full Git commit (`git rev-parse HEAD`) for the build. Each archive includes its runtime, third-party notices, license scope, CC0 text and a SOURCE.md pointing to that commit. Build work goes under the chosen publish directory.
 
 The [author walkthrough](AVALONIA.md) covers the two desktop packages. To replay the Linux UI check, extract the Linux tarball under the test user's home, then run the following in a graphical Linux session with Bash, Python 3, xdotool and ImageMagick installed. To prepare the trial inputs on Windows, build the solution, run the seed generator, and assemble the provider archives from the published Transport ZIP. Extract the released Garru Saddle into a scratch directory and copy its inner folder as `Sample art`. Copy this kit to Linux or mount the same folder there.
 
