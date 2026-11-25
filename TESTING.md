@@ -66,3 +66,9 @@ python Tools/kit.py --out "$qa/delivery" --dotnet-root $dotnetRoot --packs "$qa/
 ```
 
 The kit script compares the distributed editor binaries with the hashes from both WPF trials and rereads the finished ZIP against its file checksums. Supplied game captures show the middle of the turn from the side. The full game logs and save slots stay in the trial directories. The archived WPF trial measurements in EVIDENCE.md were collected on v0.18.0.
+
+## Hosted CI scope and reader-update order
+
+Hosted Windows CI builds the solution against verified Meitou v0.20.1 assemblies and executes `Tools/Checks --fit-proof` in a temporary directory. This covers fitting transforms, portable filenames and rejection of dangling asset references; it does not run the editor UI, Kenshi-dependent checks, Linux trials or live rides. Production promotion to `release` deliberately fails until validated production packaging and release acceptance checks are configured.
+
+Merge the CI bootstrap (PR #2) before the v0.22.1 reader update (PR #1). The reader branch carries the same workflow with its engine download and checksum updated together to v0.22.1. Require a fresh passing run on that branch before merging it; the v0.20.1 result does not verify v0.22.1 readers.
