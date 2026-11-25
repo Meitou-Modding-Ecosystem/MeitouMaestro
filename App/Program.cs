@@ -47,7 +47,7 @@ internal sealed class Welcome : Window
         try { if (File.Exists(Program.Settings)) input = JsonSerializer.Deserialize<string[]>(File.ReadAllText(Program.Settings)) ?? input; } catch (IOException) { } catch (JsonException) { }
         string? script = args is ["--ui-trial", var path] ? path : null;
         if (script != null) input = JsonDocument.Parse(File.ReadAllBytes(script)).RootElement.GetProperty("folders").EnumerateArray().Select(v => v.GetString()!).ToArray();
-        var labels = new[] { "Kenshi installation", "MeitouClient v0.20.1 directory", "Writable mod folder" };
+        var labels = new[] { "Kenshi installation", $"MeitouClient v{Maestro.Core.EngineReaders.SupportedVersion} directory", "Writable mod folder" };
         var boxes = new List<TextBox>();
         for (int i = 0; i < labels.Length; i++)
         {

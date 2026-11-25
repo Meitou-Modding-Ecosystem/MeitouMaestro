@@ -1,12 +1,12 @@
 # Make a riding pack with Maestro
 
-Maestro playtest.1 targets **MeitouClient v0.20.1** and **Meitou Transport playtest.5**. The author needs an installed copy of Kenshi. Each editor archive includes its own .NET runtime. Players install the resulting mod and its dependencies.
+Maestro playtest.2 targets **MeitouClient v0.22.1** and **Meitou Transport playtest.6**. The author needs an installed copy of Kenshi. Each editor archive includes its own .NET runtime. Players install the resulting mod and its dependencies.
 
 ## Open the editor
 
 1. Extract the editor for your system. On Windows, open **MeitouMaestro.exe**. On Linux, extract the `.tar.gz` with `tar -xzf` and run **./MeitouMaestro** from the extracted folder in your desktop session. Use a desktop with OpenGL. On minimal Ubuntu 24.04, install the X11, Mesa GL, fontconfig, ICU and GTK 3 desktop libraries. The tested Linux environment is Ubuntu 24.04 x64 under WSLg.
-2. Extract the [Transport framework ZIP](https://github.com/Meitou-Modding-Ecosystem/MeitouTransport/releases/tag/v0.3.0-playtest.5) into Kenshi’s `mods` folder. The framework includes the `maestro.json` that supplies **Add riding fit**. Enable the framework in your authoring profile. To fit a custom animal from a separate mod, enable that mod too.
-3. Choose your Kenshi installation, the extracted **game** directory containing the v0.20.1 `Meitou.Core.dll` and `Meitou.Data.dll`, and an empty writable project folder named **Garru Saddle**. You can paste paths into all three fields. [Meitou v0.20.1 game packages](https://github.com/VlcekM/MeitouClient/releases/tag/v0.20.1)
+2. Extract the [Transport framework ZIP](https://github.com/Meitou-Modding-Ecosystem/MeitouTransport/releases/tag/v0.3.0-playtest.6) into Kenshi’s `mods` folder. The framework includes the `maestro.json` that supplies **Add riding fit**. Enable the framework in your authoring profile. To fit a custom animal from a separate mod, enable that mod too.
+3. Choose your Kenshi installation, the extracted **game** directory containing the v0.22.1 `Meitou.Core.dll` and `Meitou.Data.dll`, and an empty writable project folder named **Garru Saddle**. You can paste paths into all three fields. [Meitou v0.22.1 game packages](https://github.com/VlcekM/MeitouClient/releases/tag/v0.22.1)
 
 Extract the Garru Saddle example ZIP from the same Transport release into a reference folder. Its meshes and textures can be freely reused.
 
@@ -45,7 +45,7 @@ The FCS header declares the framework dependency. The JSON records the stable fi
 
 ## Ride the export
 
-On Windows, extract your ZIP into Kenshi’s `mods` folder alongside **Meitou Transport** and **Stoat Desert Ride** from the handoff. Extract the example Garru Saddle ZIP elsewhere for its CC0 art. Install your own export in the game. Use one installed copy of each mod.
+On Windows, extract your ZIP into Kenshi’s `mods` folder alongside **Meitou Transport** and **Stoat Desert Ride** from [Transport playtest.6](https://github.com/Meitou-Modding-Ecosystem/MeitouTransport/releases/tag/v0.3.0-playtest.6) (`Meitou-Transport-0.3.0-playtest.6.zip` and `Stoat-Desert-Ride-0.3.0-playtest.6.zip`). Extract the example Garru Saddle ZIP elsewhere for its CC0 art. Install your own export in the game. Use one installed copy of each mod.
 
 Load **Meitou Transport → Garru Saddle → Stoat Desert Ride**. Start **New Game → Stoat Desert Ride**, select Sable beside the Garru, choose **F10 → Mount nearby animal**, and right-click to ride. **F10 → Dismount** returns control to Sable.
 
@@ -54,3 +54,7 @@ For a native-Linux tester, record your distribution, desktop session and editor 
 ## A design example for Husbandry
 
 How would you make a hitching post that an author can place in their own town? Describe the town records the author supplies, what happens when a player assigns or releases an animal, what persists after reload, and one small test at the post. If assigning the animal requires a job that Meitou cannot express, include the observed behavior in the example.
+
+## Source, licenses and feedback
+
+The editor archive includes **SOURCE.md** with its exact source commit and download link, **LICENSING.md** with the software/content distinction, and **Licenses/** with dependency notices and the CC0 text. Report editor problems through [Maestro Issues](https://github.com/Meitou-Modding-Ecosystem/MeitouMaestro/issues), including the editor and game versions, operating system, steps and error text.

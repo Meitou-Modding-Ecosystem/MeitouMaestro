@@ -1,4 +1,4 @@
-# Run the exported town and condition provider together in a private v0.20.1 data profile.
+# Run the exported town and condition provider together in a private v0.22.1 data profile.
 param([Parameter(Mandatory)][string]$Game, [Parameter(Mandatory)][string]$Kenshi,
       [Parameter(Mandatory)][string]$Packs, [Parameter(Mandatory)][string]$Trial)
 $ErrorActionPreference='Stop'
