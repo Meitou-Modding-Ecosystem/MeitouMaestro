@@ -41,10 +41,10 @@ def assemble(args):
         with ZipFile(packs / (name + ".zip")) as z:
             if not all(m.startswith(name + "/") for m in z.namelist()) or z.testzip():
                 raise ValueError(f"Broken exported pack {name}")
-    shutil.copy2(args.transport_dist / "Stoat-Desert-Ride-0.3.0-playtest.5.zip", packs / "Stoat Desert Ride.zip")
+    shutil.copy2(args.transport_dist / "Stoat-Desert-Ride-0.3.0-playtest.6.zip", packs / "Stoat Desert Ride.zip")
     source = dst / "Source"
     source.mkdir()
-    shutil.copy2(args.transport_dist / "Meitou-Transport-0.3.0-playtest.5-source.zip", source)
+    shutil.copy2(args.transport_dist / "Meitou-Transport-0.3.0-playtest.6-source.zip", source)
     for name in ROOT_FILES:
         shutil.copy2(ROOT / name, dst / name if name.endswith(".md") or name == "LICENSE" else source / name)
     for name in ("README.md", "DESCRIPTORS.md", "TESTING.md", "EVIDENCE.md", "LICENSING.md", "LICENSE"):
@@ -56,7 +56,7 @@ def assemble(args):
         file.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / name, file)
     art = dst / "Sample art"
-    with ZipFile(args.transport_dist / "Garru-Saddle-0.3.0-playtest.5.zip") as z:
+    with ZipFile(args.transport_dist / "Garru-Saddle-0.3.0-playtest.6.zip") as z:
         for file in ["meshes/mvv_garru_saddle.mesh", "textures/mvv_garru_saddle.dds", "LICENSES/CC0-1.0.txt", "LICENSING.md", "LICENSE"]:
             dest = art / file
             dest.parent.mkdir(parents=True, exist_ok=True)

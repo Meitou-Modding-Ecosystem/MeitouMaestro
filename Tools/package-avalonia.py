@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import tarfile
 import xml.etree.ElementTree as ET
@@ -51,12 +52,25 @@ def notices(source, cache, manifest):
             mit.append(f"{key} — {holder}")
     (target / "MIT-components.txt").write_text("\n".join(sorted(mit)) + "\n\n" + MIT, encoding="utf-8")
 
-def package(source, cache, destination, rid):
+def package(source, cache, destination, rid, source_ref):
     manifest = json.loads((source / "MeitouMaestro.deps.json").read_bytes())
     application, = [key for key in manifest["libraries"] if key.startswith("MeitouMaestro/")]
     name = "Meitou-Maestro-" + application.split("/")[1] + "-" + rid
     notices(source, cache, manifest)
     shutil.copyfile(ROOT / "AVALONIA.md", source / "START-HERE.md")
+    shutil.copyfile(ROOT / "LICENSE", source / "LICENSE-Maestro.txt")
+    shutil.copyfile(ROOT / "LICENSES/CC0-1.0.txt", source / "Licenses/CC0-1.0.txt")
+    licensing = (ROOT / "LICENSING.md").read_text(encoding="utf-8")
+    licensing = licensing.replace("](LICENSE)", "](LICENSE-Maestro.txt)").replace("LICENSES/CC0-1.0.txt", "Licenses/CC0-1.0.txt")
+    (source / "LICENSING.md").write_text(licensing, encoding="utf-8")
+    (source / "SOURCE.md").write_text(
+        "# Matching source\n\n"
+        f"Maestro {application.split('/')[1]}, source commit `{source_ref}`.\n\n"
+        f"[Browse the source](https://github.com/Meitou-Modding-Ecosystem/MeitouMaestro/tree/{source_ref}) · "
+        f"[Download source ZIP](https://github.com/Meitou-Modding-Ecosystem/MeitouMaestro/archive/{source_ref}.zip)\n\n"
+        "Build and packaging instructions are in TESTING.md in that source. "
+        "The editor archive includes its runtime and dependency notices; Meitou and Kenshi files are supplied by your own installations.\n",
+        encoding="utf-8")
     (source / "docs").mkdir(exist_ok=True)
     shutil.copyfile(ROOT / "docs/garru-fit.png", source / "docs/garru-fit.png")
     files = sorted(p for p in source.rglob("*") if p.is_file())
@@ -83,8 +97,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ("publish", "nuget", "out"):
         parser.add_argument("--" + option, type=Path, required=True)
+    parser.add_argument("--source-ref", required=True, help="Full Git commit of the clean source used to build the editor")
     args = parser.parse_args()
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", args.source_ref):
+        parser.error("--source-ref must be a full 40-character Git commit")
     args.out.mkdir(parents=True, exist_ok=True)
-    lines = [package(args.publish / rid, args.nuget, args.out, rid) for rid in ("linux-x64", "win-x64")]
+    lines = [package(args.publish / rid, args.nuget, args.out, rid, args.source_ref) for rid in ("linux-x64", "win-x64")]
     (args.out / "editor-SHA256SUMS.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))

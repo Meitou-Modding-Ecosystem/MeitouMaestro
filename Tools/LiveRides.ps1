@@ -9,13 +9,13 @@ $trial = (New-Item -ItemType Directory -Path $TrialRoot).FullName
 $unpacked = Join-Path $trial 'source'
 Expand-Archive -LiteralPath $TransportSource -DestinationPath $unpacked
 $verifierProject = @(Get-ChildItem -LiteralPath $unpacked -Recurse -Filter LiveVoyage.csproj)
-if ($verifierProject.Count -ne 1) { throw 'Expected the Transport playtest.5 source archive.' }
+if ($verifierProject.Count -ne 1) { throw 'Expected the Transport playtest.6 source archive.' }
 $verifier = $verifierProject[0].Directory
 $repo = $verifier.Parent.Parent.FullName
 $env:MEITOU_DIR = (Resolve-Path $Game).Path
 $dist = New-Item -ItemType Directory -Path (Join-Path $repo 'dist') -Force
 foreach ($name in 'Meitou Transport','Garru Saddle','Stoat Desert Ride') {
-    Copy-Item -LiteralPath (Join-Path $Packs "$name.zip") -Destination (Join-Path $dist.FullName ($name.Replace(' ','-')+'-0.3.0-playtest.5.zip'))
+    Copy-Item -LiteralPath (Join-Path $Packs "$name.zip") -Destination (Join-Path $dist.FullName ($name.Replace(' ','-')+'-0.3.0-playtest.6.zip'))
 }
 foreach ($project in $verifierProject[0].FullName,(Join-Path $repo 'tools/DesertRide/DesertRide.csproj')) {
     & dotnet build $project -c Release

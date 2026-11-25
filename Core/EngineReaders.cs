@@ -6,6 +6,7 @@ namespace Maestro.Core;
 
 public static class EngineReaders
 {
+    public const string SupportedVersion = "0.22.1";
     private static string? selected;
 
     public static void Select(string directory)
@@ -14,10 +15,10 @@ public static class EngineReaders
         foreach (var name in new[] { "Meitou.Core", "Meitou.Data" })
         {
             var file = Path.Combine(directory, name + ".dll");
-            if (!File.Exists(file)) throw new FileNotFoundException($"Choose the extracted MeitouClient v0.20.1 game folder containing {name}.dll.");
+            if (!File.Exists(file)) throw new FileNotFoundException($"Choose the extracted MeitouClient v{SupportedVersion} game folder containing {name}.dll.");
             string? version = FileVersionInfo.GetVersionInfo(file).ProductVersion;
-            if (version?.Split('+')[0] != "0.20.1")
-                throw new InvalidDataException($"Expected v0.20.1 of {name}. Found {version ?? "unknown version"}.");
+            if (version?.Split('+')[0] != SupportedVersion)
+                throw new InvalidDataException($"Expected v{SupportedVersion} of {name}. Found {version ?? "unknown version"}.");
         }
         if (selected == null) AssemblyLoadContext.Default.Resolving += Resolve;
         else if (selected != directory)

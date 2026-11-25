@@ -7,3 +7,5 @@ Download Transport and its matching source from its own release. The sample sadd
 The editor reads Kenshi models, skeletons and records from the author's installation. Kenshi and MeitouClient retain their respective rights. The included playtest screenshots depict gameplay and are outside the CC0 dedication.
 
 The Avalonia archives include their application license and a Licenses directory for the bundled .NET runtime, Avalonia and rendering dependencies. The author selects a separate MeitouClient game directory for the versioned readers.
+
+Packaged builds include SOURCE.md identifying their matching source commit and download. The original guides and provider definitions use CC0; gameplay and fitting screenshots remain outside that dedication.

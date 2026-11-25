@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  # Also validate source branches, including this first CI addition from a fork.
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Build and regression checks (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: 11.0.x
+      - name: Download and verify official reader fixtures
+        shell: pwsh
+        run: ./Tools/GetCIReaders.ps1 -Output (Join-Path $env:RUNNER_TEMP 'maestro-readers')
+      - name: Build and run asset-free regressions
+        shell: pwsh
+        run: ./Tools/CI.ps1 -CurrentReaders $env:MEITOU_DIR -OldReaders $env:MAESTRO_OLD_READERS -Scratch (Join-Path $env:RUNNER_TEMP 'maestro-checks')
+
+  development-readiness:
+    name: Development readiness
+    if: always()
+    needs: [validate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require both platform regression jobs
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python - <<'PY'
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          if not results or any(item['result'] != 'success' for item in results.values()):
+              raise SystemExit('A platform regression check failed, was cancelled, or was skipped')
+          PY
+
+  release-readiness:
+    name: Release readiness
+    if: always()
+    needs: [development-readiness]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require development checks and block unvalidated production promotion
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          TARGET: ${{ github.base_ref || github.ref_name }}
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          if os.environ['TARGET'] == 'release':
+              raise SystemExit('Production promotion is disabled: validated production packaging and release acceptance checks are not configured.')
+          if not results or any(item['result'] != 'success' for item in results.values()):
+              raise SystemExit('A development prerequisite failed, was cancelled, or was skipped')
+          PYCODE
