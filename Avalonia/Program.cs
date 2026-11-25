@@ -82,7 +82,7 @@ internal sealed class OpenProject : Window
             else if (File.Exists(settings)) initial = JsonSerializer.Deserialize<string[]>(File.ReadAllBytes(settings)) ?? [];
         }
         catch (Exception ex) when (ex is IOException or JsonException) { status.Text = ex.Message; }
-        string[] labels = ["Kenshi installation", "MeitouClient v0.20.1 game folder", "Writable mod folder"];
+        string[] labels = ["Kenshi installation", $"MeitouClient v{EngineReaders.SupportedVersion} game folder", "Writable mod folder"];
         for (int i = 0; i < folders.Length; i++)
         {
             var box = folders[i]; box.Text = initial.ElementAtOrDefault(i) ?? "";

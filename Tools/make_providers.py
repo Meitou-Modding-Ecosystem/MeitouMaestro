@@ -32,7 +32,7 @@ def make_packs(transport, seeds, out):
 
 if __name__ == "__main__":
     cli = argparse.ArgumentParser(description=__doc__)
-    cli.add_argument("--transport", type=Path, required=True, help="released playtest.5 framework ZIP")
+    cli.add_argument("--transport", type=Path, required=True, help="released playtest.6 framework ZIP")
     cli.add_argument("--seeds", type=Path, required=True, help="output of Tools/Seed")
     cli.add_argument("--out", type=Path, required=True)
     args = cli.parse_args()

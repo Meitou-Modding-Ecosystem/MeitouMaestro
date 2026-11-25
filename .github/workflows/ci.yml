@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+  # Also validate source branches, including this first CI addition from a fork.
   push:
   workflow_dispatch:
 
@@ -14,7 +15,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Build and fit checks (${{ matrix.os }})
+    name: Build and regression checks (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -28,14 +29,12 @@ jobs:
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: 11.0.x
-      - name: Download verified build fixtures
+      - name: Download and verify official reader fixtures
         shell: pwsh
-        working-directory: .
-        run: ./Tools/GetCIEngine.ps1 -Output (Join-Path $env:RUNNER_TEMP 'meitou-fixtures')
-      - name: Build and run regressions
+        run: ./Tools/GetCIReaders.ps1 -Output (Join-Path $env:RUNNER_TEMP 'maestro-readers')
+      - name: Build and run asset-free regressions
         shell: pwsh
-        working-directory: .
-        run: ./Tools/CI.ps1
+        run: ./Tools/CI.ps1 -CurrentReaders $env:MEITOU_DIR -OldReaders $env:MAESTRO_OLD_READERS -Scratch (Join-Path $env:RUNNER_TEMP 'maestro-checks')
 
   development-readiness:
     name: Development readiness
@@ -44,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require successful validation
+      - name: Require both platform jobs
         env:
           RESULTS: ${{ join(needs.*.result, ',') }}
         run: |
@@ -52,5 +51,5 @@ jobs:
           import os
           results = os.environ['RESULTS'].split(',')
           if not results or any(result != 'success' for result in results):
-              raise SystemExit('Validation failed, was cancelled, or was skipped')
+              raise SystemExit('A required platform check failed, was cancelled, or was skipped')
           PY

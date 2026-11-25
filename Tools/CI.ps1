@@ -1,19 +1,32 @@
-param([string]$Dotnet = 'dotnet')
+param(
+    [Parameter(Mandatory)][string]$CurrentReaders,
+    [Parameter(Mandatory)][string]$OldReaders,
+    [Parameter(Mandatory)][string]$Scratch,
+    [string]$Dotnet = 'dotnet'
+)
 $ErrorActionPreference = 'Stop'
-function Invoke-Checked([string]$Command, [string[]]$Arguments) {
-    & $Command @Arguments
-    if ($LASTEXITCODE -ne 0) { throw "$Command failed ($LASTEXITCODE): $Arguments" }
+$env:MEITOU_DIR = (Resolve-Path -LiteralPath $CurrentReaders).Path
+$OldReaders = (Resolve-Path -LiteralPath $OldReaders).Path
+$Scratch = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Scratch)
+$repo = Split-Path $PSScriptRoot -Parent
+function Invoke-Dotnet {
+    & $Dotnet @args
+    if ($LASTEXITCODE -ne 0) { throw "dotnet failed ($LASTEXITCODE): $args" }
 }
-Push-Location (Split-Path $PSScriptRoot -Parent)
+Push-Location $repo
 try {
-    if ($IsWindows) {
-        Invoke-Checked $Dotnet @('build', 'MeitouMaestro.slnx', '-c', 'Release')
+    if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)) {
+        Invoke-Dotnet build MeitouMaestro.slnx -c Release
     } else {
+        # WPF is Windows-only. Build all other solution projects on Linux.
         foreach ($project in 'Avalonia/Maestro.Avalonia.csproj', 'Providers/Gate/Maestro.Gate.csproj',
                 'Examples/Gatekeeper/Gatekeeper.csproj', 'Tools/Checks/Checks.csproj', 'Tools/Seed/Seed.csproj') {
-            Invoke-Checked $Dotnet @('build', $project, '-c', 'Release')
+            Invoke-Dotnet build $project -c Release
         }
     }
-    $scratch = Join-Path ([IO.Path]::GetTempPath()) ('maestro-ci-' + [guid]::NewGuid())
-    Invoke-Checked $Dotnet @('Tools/Checks/bin/Release/net11.0/Checks.dll', '--fit-proof', $scratch)
-} finally { Pop-Location }
+    $checks = Join-Path $repo 'Tools/Checks/bin/Release/net11.0/Checks.dll'
+    Invoke-Dotnet $checks --reader-proof $env:MEITOU_DIR $OldReaders (Join-Path $Scratch 'readers')
+    Invoke-Dotnet $checks --fit-proof (Join-Path $Scratch 'fits')
+} finally {
+    Pop-Location
+}
