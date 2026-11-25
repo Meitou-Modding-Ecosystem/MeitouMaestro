@@ -36,20 +36,41 @@ jobs:
         shell: pwsh
         run: ./Tools/CI.ps1 -CurrentReaders $env:MEITOU_DIR -OldReaders $env:MAESTRO_OLD_READERS -Scratch (Join-Path $env:RUNNER_TEMP 'maestro-checks')
 
-  release-readiness:
-    name: Release readiness
+  development-readiness:
+    name: Development readiness
     if: always()
     needs: [validate]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require both platform jobs
+      - name: Require both platform regression jobs
         env:
-          RESULTS: ${{ join(needs.*.result, ',') }}
+          RESULTS: ${{ toJSON(needs) }}
         run: |
           python - <<'PY'
-          import os
-          results = os.environ['RESULTS'].split(',')
-          if not results or any(result != 'success' for result in results):
-              raise SystemExit('A required platform check failed, was cancelled, or was skipped')
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          if not results or any(item['result'] != 'success' for item in results.values()):
+              raise SystemExit('A platform regression check failed, was cancelled, or was skipped')
           PY
+
+  release-readiness:
+    name: Release readiness
+    if: always()
+    needs: [development-readiness]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require development checks and block unvalidated production promotion
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+          TARGET: ${{ github.base_ref || github.ref_name }}
+        run: |
+          python - <<'PYCODE'
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          if os.environ['TARGET'] == 'release':
+              raise SystemExit('Production promotion is disabled: validated production packaging and release acceptance checks are not configured.')
+          if not results or any(item['result'] != 'success' for item in results.values()):
+              raise SystemExit('A development prerequisite failed, was cancelled, or was skipped')
+          PYCODE

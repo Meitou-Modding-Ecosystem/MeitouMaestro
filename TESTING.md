@@ -78,3 +78,9 @@ python Tools/kit.py --out "$qa/delivery" --dotnet-root $dotnetRoot --packs "$qa/
 ```
 
 The kit script compares the distributed editor binaries with the hashes from both WPF trials and rereads the finished ZIP against its file checksums. Supplied game captures show the middle of the turn from the side. The full game logs and save slots stay in the trial directories. The archived WPF trial measurements in EVIDENCE.md were collected on v0.18.0.
+
+## Hosted CI scope and reader-update order
+
+Merge the CI bootstrap (PR #2) before the v0.22.1 reader update (PR #1). This branch incorporates that bootstrap while retaining its broader Windows/Linux regression matrix. Both platforms verify the official v0.22.1 reader fixture and the v0.20.1 rejection fixture, run `--reader-proof`, and run `--fit-proof`. Linux excludes the Windows-only WPF project. Development readiness requires both platform jobs.
+
+Production promotion to `release` deliberately fails until validated production packaging and release acceptance checks are configured. Hosted checks do not run the editor UI, Kenshi-dependent checks, WSLg trials or live rides. Require fresh passing CI on the reader branch before merging; the bootstrap's v0.20.1 Windows result does not verify these readers.
